@@ -24,10 +24,10 @@ const register = async (req,res) => {
 
         const passwordHash = await bcrypt.hash(password,12)
         const newUser = new Users({ name, email, password: passwordHash, cf_password})
-        console.log(newUser)
+        await newUser.save()
         res.json({msg: "Register Success!"})
 
     }catch(err) {
-        return res.json.status(500).json({err: err.message})
+        return res.status(500).json({err: err.message})
     }
 }

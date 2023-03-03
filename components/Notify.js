@@ -18,7 +18,7 @@ const Notify = () => {
                     bgColor="bg-danger"
                 />
             }
-            {notify.succes && 
+            {notify.success && 
                 <Toast
                     msg={{ msg: notify.success, title: "Success"}}
                     handleShow={() => dispatch({type: 'NOTIFY', payload: {}})}
