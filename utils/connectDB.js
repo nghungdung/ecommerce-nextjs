@@ -5,15 +5,11 @@ const connectDB = () => {
         console.log('Already connected')
         return
     } 
-    mongoose.connect(process.env.MONGODB_URL, {
-        useCreateIndex: true,
-        useFindAndModify: false,
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }, err => {
-        if(err) throw err
-        console.log('Connect to mongodb')
-    })
+    mongoose.connect(process.env.MONGODB_URL, 
+        err => {
+            if(err) throw err
+            console.log('Connect to mongodb')
+        })
 }
 
 export default connectDB
