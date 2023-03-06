@@ -2,6 +2,9 @@ import React, {useContext} from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {DataContext} from '../store/GlobalState'
+import Cookie from "js-cookie"
+
+
 
 function NavBar() {
   const router = useRouter()
@@ -16,17 +19,27 @@ function NavBar() {
       return ""
     }
   }
-
+  
+  const handleLogout = () =>{
+    Cookie.remove('refreshtoken', {path: 'api/auth/accessToken'})
+    localStorage.removeItem('firstLogin')
+    dispatch({ type: 'AUTH', payload: {} })
+    dispatch({ type: 'NOTIFY', payload: {success: 'Logged out'} })
+  }
   const loggedRouter = () => {
     return(
       <li className="nav-item dropdown">
-        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img src={auth.user.avatar} alt={auth.user.name}/>
-          {auth.user.name}
+        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src={auth.user.avatar} alt={auth.user.name} 
+        style={{
+          borderRadius: '50%', width: '30px', height: '30px',
+          transform: 'translateY(-3px)', marginRight: '3px'
+        }}/>
+        {auth.user.name}
         </a>
         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a className="dropdown-item" href="#">Profile</a>
-          <a className="dropdown-item" href="#">Logout</a>
+          <a className="dropdown-item">Profile</a>
+          <button className="dropdown-item" onClick={handleLogout}>Logout</button>
         </div>
       </li>
     )
