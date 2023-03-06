@@ -1,15 +1,36 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import {DataContext} from '../store/GlobalState'
 
 function NavBar() {
   const router = useRouter()
+  const {state, dispatch} = useContext(DataContext)
+  const {auth} = state
+
+
   const isActive = (r) => {
     if(r === router.pathname){
       return " active"
     }else{
       return ""
     }
+  }
+
+  const loggedRouter = () => {
+    return(
+      <li className="nav-item dropdown">
+        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src={auth.user.avatar} alt={auth.user.name}/>
+          {auth.user.name}
+        </a>
+        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a className="dropdown-item" href="#">Profile</a>
+          <a className="dropdown-item" href="#">Logout</a>
+        </div>
+      </li>
+    )
+    
   }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,21 +48,16 @@ function NavBar() {
               Cart 
             </Link>
           </li>
-          <li className="nav-item">
-            <Link href="/signin" className={"nav-link" + isActive('/signin')} >
-            <i className="bi bi-person-circle" aria-hidden="true"></i>
-              Sign in 
-            </Link>
-          </li>
-          {/* <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              User Name
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a className="dropdown-item" href="#">Profile</a>
-              <a className="dropdown-item" href="#">Logout</a>
-            </div>
-          </li> */}
+          {
+            Object.keys(auth).length === 0
+            ? <li className="nav-item">
+              <Link href="/signin" className={"nav-link" + isActive('/signin')} >
+                <i className="bi bi-person-circle" aria-hidden="true"></i>
+                Sign in 
+              </Link>
+            </li>
+            :loggedRouter()
+          }                
         </ul>
       </div>
     </nav>

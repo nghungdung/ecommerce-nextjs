@@ -105,3 +105,7 @@ a {
     color-scheme: dark;
   }
 } */
+
+/* -----------Loading------------*/
+
+@import url("./loading.css");
