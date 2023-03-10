@@ -57,7 +57,7 @@ const DetailProduct = (props) => {
                         : <h6 className='text-danger'>Out of Stock </h6>
                     }
 
-                    <h6 className='text-danger'>Sold: ${product.sold} </h6>
+                    <h6 className='text-danger'>Sold: {product.sold} </h6>
                 </div>
 
                 <div className='my-2'>{product.description}</div>
