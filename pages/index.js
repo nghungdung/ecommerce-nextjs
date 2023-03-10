@@ -30,7 +30,6 @@ const Home = (props) => {
 
 export async function getServerSideProps() {
   const res = await getData('product')
-  console.log(res)
   return {
     props: {
       products: res.products,

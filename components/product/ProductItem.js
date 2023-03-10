@@ -14,8 +14,6 @@ const ProductItem = ({product}) => {
             </>
         )
     }
-
-    console.log(product)
     return (
         <div className="card" style={{width: '18rem'}}>
             <img src={product.images[0].url} className="card-img-top" alt={product.images[0].url}/>
