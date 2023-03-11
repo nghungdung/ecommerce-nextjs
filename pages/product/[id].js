@@ -1,24 +1,22 @@
 import Head from 'next/head'
-import { useState} from 'react'
+import { useContext, useState} from 'react'
 import { getData } from '../../utils/fetchData'
+import { DataContext } from '../../store/GlobalState'
+import { addToCart } from '../../store/Actions'
+
 
 const DetailProduct = (props) => {
     const [product] = useState(props.product)
 
     const [tab, setTab] = useState(0)
 
+    const { state, dispatch } = useContext(DataContext)
+    const { cart } = state
+
     const isActive = (index)  => {
         if(tab === index) return "active"
         return ""
     }
-    // useEffect(() => {
-    //     const images = imgRef.current.children
-    //     for(let i=0; i<images.length; i++){
-    //         images[i].className = images[i].className.replace("active","img-thumbnail rounded")
-    //     }
-
-    //     images[tab].className = "img-thumbnail rounded active"
-    // },[tab])
 
     return(
         <div className='row detail_page'>
@@ -64,7 +62,10 @@ const DetailProduct = (props) => {
                 <div className='my-2'>{product.content}</div>
 
 
-                <button type='button' className='btn btn-dark d-block my-3 px-5'>Buy</button>
+                <button type='button' className='btn btn-dark d-block my-3 px-5'
+                onClick={() => dispatch(addToCart(product, cart))}>
+                    Buy
+                </button>
             </div>
         </div>
     )
