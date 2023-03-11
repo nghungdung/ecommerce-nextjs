@@ -52,14 +52,14 @@ function NavBar() {
         <Link className="navbar-brand" href="/">
           E-Commerce
         </Link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link href="/cart" className={"nav-link" + isActive('/cart')} >
-                <i className="bi bi-basket2-fill position-relative px-3" aria-hidden="true">
+                <i className="bi bi-basket2-fill position-relative px-1" aria-hidden="true">
                   <span className='position-absolute'
                   style={{
                     padding: '3px 6px',
@@ -80,7 +80,7 @@ function NavBar() {
               Object.keys(auth).length === 0
               ? <li className="nav-item">
                 <Link href="/signin" className={"nav-link" + isActive('/signin')} >
-                  <i className="bi bi-person-circle" aria-hidden="true"></i>
+                  <i className="bi bi-person-circle px-1" aria-hidden="true"></i>
                   Sign in 
                 </Link>
               </li>
