@@ -41,7 +41,7 @@ const Profile = () => {
             updatePassword()
         }
 
-        // if(name !== auth.user.name || avatar) updateInfor()
+        if(name !== auth.user.name || avatar) updateInfor()
     }
     const updatePassword = () => {
         dispatch({ type: 'NOTIFY', payload: {loading: true} })
@@ -64,12 +64,24 @@ const Profile = () => {
         setData({...data,avatar: file})
     }
 
-    // const updateInfor = async () => {
-    //     let media
-    //     dispatch({ type: 'NOTIFY', payload: {loading: true}})
+    const updateInfor = async () => {
+        let media
+        dispatch({ type: 'NOTIFY', payload: {loading: true}})
 
-    //     if(avatar) media = await imageUpload([avatar])
-    // }
+        if(avatar) media = await imageUpload([avatar])
+
+        patchData('user', {
+            name, avatar: avatar ? media[0].url : auth.user.avatar
+        }, auth.token).then(res => {
+            if(res.err) return dispatch({ type: 'NOTIFY', payload: {error: res.err}})
+
+            dispatch({type: 'AUTH', payload: {
+                token: auth.token,
+                user: res.user
+            }})
+            return dispatch({ type: 'NOTIFY', payload: {success: res.msg}})
+        })
+    }
 
 
     if(!auth.user) return null
