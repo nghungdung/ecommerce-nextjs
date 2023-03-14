@@ -39,7 +39,7 @@ function NavBar() {
         {auth.user.name}
         </a>
         <ul className="dropdown-menu" >
-          <li><a className="dropdown-item">Profile</a></li>
+          <li><Link className="dropdown-item" href="/profile">Profile</Link></li>
           <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
         </ul>
       </li>
