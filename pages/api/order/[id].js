@@ -19,7 +19,7 @@ const paymentOrder = async (req,res) => {
         const {id} = req.query
 
         await Orders.findOneAndUpdate({_id: id}, {
-            paid: true, dateOfPayment: new Date().toISOString
+            paid: true, dateOfPayment: new Date().toISOString()
         })
 
         res.json({msg: 'Payment success'})
