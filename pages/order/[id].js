@@ -19,6 +19,8 @@ const DetailOrder = () => {
         setOrderDetail(newArr)
     },[orders])
 
+    if(!auth.user) return null
+
     return (
         <div className="my-3">
             <Head>
@@ -30,7 +32,7 @@ const DetailOrder = () => {
                 </button>
             </div>
             
-            <OrderDetail orderDetail={orderDetail}/>
+            <OrderDetail orderDetail={orderDetail} auth={auth}/>
         </div>
     )
 }

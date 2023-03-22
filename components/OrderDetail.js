@@ -1,8 +1,10 @@
+import auth from "@/middleware/auth"
 import Link from "next/link"
 import PaypalBtn from "./paypalBtn"
 
 
-const OrderDetail = ({orderDetail}) => {
+const OrderDetail = ({orderDetail, auth}) => {
+
     return(
         <>
             
@@ -22,9 +24,17 @@ const OrderDetail = ({orderDetail}) => {
                                 {
                                     order.delivered ? `Deliverd on ${order.updatedAt}` : 'Not Deliverd'
                                 }
+                                {
+                                    auth.user.role === 'admin' && !order.delivered &&
+                                    <button className="btn btn-dark text-uppercase ">
+                                        Mark as delivered
+                                    </button>
+                                }
                             </div>
 
                             <h3>Payment</h3>
+                            <h6>Method: {order.method}</h6>
+                            <p>PaymentId: {order.paymentId}</p>
                             <div className={`alert ${order.paid ? 'alert-success' : 'alert-danger'}
                             d-flex justify-content-between align-items-center`} role="alert">
                                 {
@@ -60,7 +70,7 @@ const OrderDetail = ({orderDetail}) => {
                     </div>
 
                     {
-                        !order.paid &&
+                        !order.paid && auth.user.role !== 'admin' && 
                         <div className="p-4">
                             <h2 className="mb-4 text-uppercase">Total: ${order.total}</h2>
                             <PaypalBtn order={order}/>
