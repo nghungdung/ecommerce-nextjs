@@ -169,7 +169,7 @@ const Profile = () => {
                                             <td className="p-2">${order.total}</td>
                                             <td className="p-2">
                                                 {
-                                                    order.deliverd
+                                                    order.delivered
                                                     ? <i className="bi bi-check-lg text-success"></i>
                                                     : <i className="bi bi-x-lg text-danger"></i>
                                                 }

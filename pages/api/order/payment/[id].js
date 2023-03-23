@@ -16,15 +16,18 @@ export default async (req, res) => {
 const paymentOrder = async (req,res) => {
     try {
         const result = await auth(req, res)
-        const { id } = req.query
-        const { paymentId } = req.body
-
-        await Orders.findOneAndUpdate({_id: id}, {
-            paid: true, dateOfPayment: new Date().toISOString(), paymentId,
-            method: 'Paypal'
-        })
-
-        res.json({msg: 'Payment success'})
+        if(result.role === 'user') {
+            const { id } = req.query
+            const { paymentId } = req.body
+    
+            await Orders.findOneAndUpdate({_id: id}, {
+                paid: true, dateOfPayment: new Date().toISOString(), paymentId,
+                method: 'Paypal'
+            })
+    
+            res.json({msg: 'Payment success'})
+        }
+       
     } catch (err) {
         return res.status(500).json({err: err.message})
     }

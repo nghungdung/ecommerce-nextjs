@@ -9,7 +9,7 @@ export default async (req, res) => {
     switch(req.method) {
         case "PATCH":
             await deliveredOrder(req,res)
-            break
+            break  
     }
 }
 
@@ -20,14 +20,17 @@ const deliveredOrder = async (req,res) => {
         return res.status(400).json({err: 'Authentication is not valid'}) 
         const { id } = req.query
 
-        const order = Orders.findOne({_id: id})
-        console.log(order)
+        const order = await Orders.findOne({_id: id})
+
         if(order.paid){
             await Orders.findOneAndUpdate({_id: id}, {delivered: true})
     
             res.json({
                 msg: 'Updated success',
                 result: {
+                    paid: true,
+                    dateOfPayment: order.dateOfPayment,
+                    method: order.method,
                     delivered: true
                 }
             })
@@ -40,15 +43,13 @@ const deliveredOrder = async (req,res) => {
             res.json({
                 msg: 'Updated success',
                 result: {
-                    paid: true, dateOfPayment: new Date().toISOString(),
-                    method: 'Receive Cash', delivered: true
+                    paid: true,
+                    dateOfPayment: new Date().toISOString(),
+                    method: 'Receive Cash',
+                    delivered: true
                 }
             })
         }
-
-        
-
-
     } catch (err) {
         return res.status(500).json({err: err.message})
     }
