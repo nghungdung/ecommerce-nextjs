@@ -32,7 +32,7 @@ const DetailOrder = () => {
                 </button>
             </div>
             
-            <OrderDetail orderDetail={orderDetail} auth={auth}/>
+            <OrderDetail orderDetail={orderDetail} state={state} dispatch={dispatch}/>
         </div>
     )
 }
