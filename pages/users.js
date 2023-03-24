@@ -1,12 +1,12 @@
 import Head from "next/head"
 import { useContext } from "react"
 import { DataContext } from "@/store/GlobalState"
-
+import Link from "next/link"
 
 
 const Users = () => {
     const {state, dispatch} = useContext(DataContext)
-    const { users } = state
+    const { users, auth } = state
 
     return (
         <div className="table-responsive">
@@ -47,7 +47,20 @@ const Users = () => {
                                         : <i className="bi bi-x-lg text-danger"></i>
                                     }
                                 </th>
-                                <th>Action</th>
+                                <th>
+                                    <Link href={auth.user.root && auth.user.email || user.email
+                                    ? `/edit_user/${user._id}` : '#!'}>
+                                        <i className="bi bi-pencil-square text-info me-2" title="Edit"></i>
+                                    </Link>
+
+                                    {
+                                        auth.user.root && auth.user.email || user.email
+                                        ? <i className="bi bi-trash3 text-danger ms-2" title="Remove"
+                                        data-toggle="modal" data-target="#exampleModal"></i>
+
+                                        : <i className="bi bi-trash3 text-danger ms-2" title="Remove"></i>
+                                    }
+                                </th>
                             </tr>
                         ))
                     }
