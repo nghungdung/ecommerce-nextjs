@@ -56,7 +56,7 @@ const Users = () => {
                                     {
                                         auth.user.root && auth.user.email || user.email
                                         ? <i className="bi bi-trash3 text-danger ms-2" title="Remove"
-                                        data-toggle="modal" data-target="#exampleModal"></i>
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
 
                                         : <i className="bi bi-trash3 text-danger ms-2" title="Remove"></i>
                                     }
