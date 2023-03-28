@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { useContext, useState, useEffect } from "react"
 import { DataContext } from "@/store/GlobalState"
+import { updateItem } from "@/store/Actions"
 import { useRouter } from "next/router"
 import { patchData } from "@/utils/fetchData"
 
@@ -35,7 +36,14 @@ const EditUser = () => {
         if(num % 2 !== 0){
             dispatch({type: 'NOTIFY', payload: {loading: true}})
             patchData(`user/${editUser._id}`, {role}, auth.token)
-            .then(res => console.log(res))
+            .then(res => {
+                if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+                dispatch(updateItem(users, editUser._id, {
+                    ...editUser, role
+                }, 'ADD_USERS'))
+
+                return dispatch({type: 'NOTIFY', payload: {success: res.msg}})
+            })
         }
     }
 

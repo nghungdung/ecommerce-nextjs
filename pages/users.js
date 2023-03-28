@@ -6,8 +6,9 @@ import Link from "next/link"
 
 const Users = () => {
     const {state, dispatch} = useContext(DataContext)
-    const { users, auth } = state
+    const { users, auth, modal } = state
 
+    if(!auth.user) return null
     return (
         <div className="table-responsive">
             <Head>
@@ -48,15 +49,19 @@ const Users = () => {
                                     }
                                 </th>
                                 <th>
-                                    <Link href={auth.user.root && auth.user.email || user.email
+                                    <Link href={auth.user.root && auth.user.email !== user.email
                                     ? `/edit_user/${user._id}` : '#!'}>
                                         <i className="bi bi-pencil-square text-info me-2" title="Edit"></i>
                                     </Link>
 
                                     {
-                                        auth.user.root && auth.user.email || user.email
+                                        auth.user.root && auth.user.email !== user.email
                                         ? <i className="bi bi-trash3 text-danger ms-2" title="Remove"
-                                        data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                        onClick={() => dispatch({
+                                            type: 'ADD_MODAL',
+                                            payload: { data: users, id: user._id, title: user.name, type: 'ADD_USERS' }
+                                        })}></i>
 
                                         : <i className="bi bi-trash3 text-danger ms-2" title="Remove"></i>
                                     }
