@@ -41,23 +41,14 @@ const ProductsManager = () => {
         files.forEach(file => {
             if(file.size > 1024 * 1024)
                 return err = 'The largest img size is 1mb'
-<<<<<<< HEAD
 
             if(file.type !== 'image/jpeg' && file.type !== 'image/png')
-                return err = 'Image format is incorrect'
-=======
->>>>>>> 7aabe66477a15a6e0f5354657ea362e3ea82a61a
-
-            if(file.type !== 'image/jpg' && file.type !== 'image/png')
                 return err = 'Image format is incorrect'
             
             num += 1
             if(num <= 5) newImages.push(file)
                 return newImages
-<<<<<<< HEAD
-=======
-                
->>>>>>> 7aabe66477a15a6e0f5354657ea362e3ea82a61a
+
         })
 
         if(err) dispatch({type: 'NOTIFY', payload: {error: err}})
