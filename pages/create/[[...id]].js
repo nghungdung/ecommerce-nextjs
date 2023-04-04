@@ -1,7 +1,8 @@
 import Head from "next/head"
 import { useState, useContext } from "react"
 import { DataContext } from "@/store/GlobalState"
-import { set } from "mongoose"
+import { imageUpload } from "@/utils/imageUpload"
+import { postData } from "@/utils/fetchData"
 
 const ProductsManager = () => {
     const initialState = {
@@ -19,7 +20,7 @@ const ProductsManager = () => {
     const [images, setImages] = useState([])
 
     const {state, dispatch} = useContext(DataContext)
-    const {categories} = state
+    const {categories, auth} = state
 
     const handleChangeInput = e => {
         const {name, value} = e.target
@@ -35,21 +36,21 @@ const ProductsManager = () => {
         const files = [...e.target.files]
         
         if(files.length === 0) 
-        return dispatch({type: 'NOTIFY', payload: {error: 'Files does not exist.'}})
+            return dispatch({type: 'NOTIFY', payload: {error: 'Files does not exist.'}})
 
         files.forEach(file => {
             if(file.size > 1024 * 1024)
-            return err = 'The largest img size is 1mb'
+                return err = 'The largest img size is 1mb'
 
-            if(files.type !== 'image/jpeg' && file.type !== 'image/png')
-            return err = 'Image format is incorrect'
+            if(file.type !== 'image/jpeg' && file.type !== 'image/png')
+                return err = 'Image format is incorrect'
 
             num += 1
             if(num <= 5) newImages.push(file)
-            return newImages
+                return newImages
         })
 
-        if(err) dispatch({type: 'NOTIFY', payload: {error: err.msg}})
+        if(err) dispatch({type: 'NOTIFY', payload: {error: err}})
 
         const imgCount = images.length
         if(imgCount + newImages.length > 5)
@@ -58,13 +59,39 @@ const ProductsManager = () => {
 
     }
 
+    const deleteImage = index => {
+        const newArr = [...images]
+        newArr.splice(index, 1)
+        setImages(newArr)
+    }
+
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        if(auth.user.role !== 'admin')
+        return dispatch({type: 'NOTIFY', payload: {error: 'Authentication is not valid'}})
+
+        if(!product_id || !title || !price || !inStock || !description || !content || category === 'all' || images.length === 0)
+        return dispatch({type: 'NOTIFY', payload: {error: 'Please add all the fields'}})
+
+        dispatch({type: 'NOTIFY', payload: {loading: true}})
+        let media = []
+        const imgNewURL = images.filter(img => !img.url)
+        const imgOldURL = images.filter(img => img.url)
+
+        if(imgNewURL.length > 0) media = await imageUpload(imgNewURL)
+
+        const res = await postData('product', {...product, images: [...imgOldURL, ...media]}, auth.token)
+        if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+
+        return dispatch({type: 'NOTIFY', payload: {success: res.msg}})
+    }
     return(
         <div className="products_manager">
             <Head>
                 <title>Products Manager</title>
             </Head>
 
-            <form className="row">
+            <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
                     <input type="text" name="product_id" value={product_id}
                     placeholder="Product ID" className="d-block my-4 w-100 p-2"
@@ -76,14 +103,16 @@ const ProductsManager = () => {
 
                     <div className="row">
                         <div className="col-sm-6">
+                            <label htmlFor="price">Price</label>
                             <input type="number" name="price" value={price}
-                            placeholder="Product Price" className="d-block my-4 w-100 p-2"
+                            placeholder="Product Price" className="d-block w-100 p-2"
                             onChange={handleChangeInput}/>
                         </div>
 
                         <div className="col-sm-6">
+                        <label htmlFor="price">In Stock</label>
                             <input type="number" name="inStock" value={inStock}
-                            placeholder="Product inStock" className="d-block my-4 w-100 p-2"
+                            placeholder="Product inStock" className="d-block w-100 p-2"
                             onChange={handleChangeInput}/>
                         </div>     
                     </div>
@@ -118,23 +147,29 @@ const ProductsManager = () => {
 
                         <div className="custom-file border rounded">
                             <input type="file" className="custom-file-input"
-                            onChange={handleUploadInput} multiple/>
+                            onChange={handleUploadInput} multiple accept="image/*"/>
                         </div>
                     </div>
 
-                    <div className="row img-up">
+                    <div className="row img-up mx-0">
                         {
                             images.map((img, index) => (
-                                <div key={index} className="file_img">
+                                <div key={index} className="file_img my-1">
                                     <img src={img.url ? img.url : URL.createObjectURL(img)}
                                     alt="" className="img-thumbnail rounded"/>
+
+                                    <span onClick={() => deleteImage(index)}>X</span>
                                 </div>
                             ))
                         }
                     </div>
 
                 </div>
+
+                <button type="submit" className="btn btn-info my-3 px-4">Create</button>
             </form>
+
+            
         </div>
     )
 }

@@ -121,3 +121,7 @@ img {
 /*------------Profile-----------*/
 
 @import url("./profile.css");
+
+/*------------Products manager-----------*/
+
+@import url("./products_manager.css");
