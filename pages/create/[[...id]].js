@@ -1,12 +1,13 @@
 import Head from "next/head"
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import { DataContext } from "@/store/GlobalState"
 import { imageUpload } from "@/utils/imageUpload"
-import { postData } from "@/utils/fetchData"
+import { postData,getData, putData } from "@/utils/fetchData"
+import { useRouter } from "next/router"
+
 
 const ProductsManager = () => {
     const initialState = {
-        product_id: "",
         title: '',
         price: 0,
         inStock: 0,
@@ -15,12 +16,31 @@ const ProductsManager = () => {
         category: ''
     }
     const[product, setProduct] = useState(initialState)
-    const{product_id, title, price, inStock, description, content, category} = product
+    const{title, price, inStock, description, content, category} = product
 
     const [images, setImages] = useState([])
 
     const {state, dispatch} = useContext(DataContext)
     const {categories, auth} = state
+
+    const router = useRouter()
+    const {id} = router.query
+    const [onEdit, setOnEdit] = useState(false)
+
+    useEffect(() =>{
+        if(id){
+            setOnEdit(true)
+            getData(`product/${id}`).then(res => {
+                setProduct(res.product)
+                setImages(res.product.images)
+
+            })
+        }else{
+            setOnEdit(false)
+            setProduct(initialState)
+            setImages
+        }
+    },[id])
 
     const handleChangeInput = e => {
         const {name, value} = e.target
@@ -71,7 +91,7 @@ const ProductsManager = () => {
         if(auth.user.role !== 'admin')
         return dispatch({type: 'NOTIFY', payload: {error: 'Authentication is not valid'}})
 
-        if(!product_id || !title || !price || !inStock || !description || !content || category === 'all' || images.length === 0)
+        if(!title || !price || !inStock || !description || !content || category === 'all' || images.length === 0)
         return dispatch({type: 'NOTIFY', payload: {error: 'Please add all the fields'}})
 
         dispatch({type: 'NOTIFY', payload: {loading: true}})
@@ -81,8 +101,14 @@ const ProductsManager = () => {
 
         if(imgNewURL.length > 0) media = await imageUpload(imgNewURL)
 
-        const res = await postData('product', {...product, images: [...imgOldURL, ...media]}, auth.token)
-        if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+        let res;
+        if(onEdit){
+            res = await putData(`product/${id}`, {...product, images: [...imgOldURL, ...media]}, auth.token)
+            if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+        }else{
+            res = await postData('product', {...product, images: [...imgOldURL, ...media]}, auth.token)
+            if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+        }
 
         return dispatch({type: 'NOTIFY', payload: {success: res.msg}})
     }
@@ -94,10 +120,6 @@ const ProductsManager = () => {
 
             <form className="row" onSubmit={handleSubmit}>
                 <div className="col-md-6">
-                    <input type="text" name="product_id" value={product_id}
-                    placeholder="Product ID" className="d-block my-4 w-100 p-2"
-                    onChange={handleChangeInput}/>
-
                     <input type="text" name="title" value={title}
                     placeholder="Product Title" className="d-block my-4 w-100 p-2"
                     onChange={handleChangeInput}/>
@@ -113,16 +135,16 @@ const ProductsManager = () => {
                         <div className="col-sm-6">
                         <label htmlFor="price">In Stock</label>
                             <input type="number" name="inStock" value={inStock}
-                            placeholder="Product inStock" className="d-block w-100 p-2"
-                            onChange={handleChangeInput}/>
+                            placeholder="Product inStock" className="d-block w-100 p-2" 
+                            onChange={handleChangeInput} />
                         </div>     
                     </div>
 
                     <textarea name="description" id="description" cols="30" rows="4"
-                    placeholder="Description" onChange={handleChangeInput} className="d-block my-4 w-100 p-2"/>
+                    placeholder="Description" onChange={handleChangeInput} className="d-block my-4 w-100 p-2" value={description}/>
 
                     <textarea name="content" id="content" cols="30" rows="6"
-                    placeholder="Content" onChange={handleChangeInput} className="d-block my-4 w-100 p-2"/>
+                    placeholder="Content" onChange={handleChangeInput} className="d-block my-4 w-100 p-2" value={content}/>
                 
                     <div className="input-group-prepend px-0 my-2">
                         <select name="category" id="category" value={category}
@@ -138,6 +160,9 @@ const ProductsManager = () => {
                         </select>
                     </div>
                 
+                    <button type="submit" className="btn btn-info my-2 px-4">
+                        {onEdit ? 'Update' : 'Create'}
+                    </button>
                 </div>
 
                 <div className="col-md-6 my-4">
@@ -167,7 +192,7 @@ const ProductsManager = () => {
 
                 </div>
 
-                <button type="submit" className="btn btn-info my-3 px-4">Create</button>
+
             </form>
 
             
