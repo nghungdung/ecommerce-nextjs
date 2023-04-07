@@ -38,7 +38,7 @@ const ProductsManager = () => {
         }else{
             setOnEdit(false)
             setProduct(initialState)
-            setImages
+            setImages([])
         }
     },[id])
 

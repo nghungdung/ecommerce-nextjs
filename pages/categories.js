@@ -76,7 +76,7 @@ const Categories = () => {
                                 data-bs-toggle="modal" data-bs-target="#exampleModal"
                                 onClick={() => dispatch({
                                     type: 'ADD_MODAL',
-                                    payload: { data: categories, id: category._id, title: category.name, type: 'ADD_CATEGORIES' }
+                                    payload: [{ data: categories, id: category._id, title: category.name, type: 'ADD_CATEGORIES' }]
                                 })}></i>
 
                             </div>

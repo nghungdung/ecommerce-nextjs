@@ -2,11 +2,6 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-    product_id: {
-        type: String,
-        required: true,
-        trim: true
-    },
     title: {
         type: String,
         required: true,

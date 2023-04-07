@@ -39,7 +39,6 @@ const createProducts = async (req,res) => {
        if(!title || !price || !inStock || !description || !content || category === 'all' || images.length === 0)
        return res.status(400).json({err: 'Please add all the fields'})
 
-       console.log(product)
 
        const newProduct = new Products({
             title: title.toLowerCase(), price, inStock, description, content, category, images

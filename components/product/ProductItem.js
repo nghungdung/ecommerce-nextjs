@@ -4,7 +4,7 @@ import { DataContext } from '../../store/GlobalState'
 import { addToCart } from '../../store/Actions'
 
 
-const ProductItem = ({product}) => {
+const ProductItem = ({product, handleCheck}) => {
     const { state, dispatch } = useContext(DataContext)
     const { cart, auth } = state
 
@@ -31,7 +31,12 @@ const ProductItem = ({product}) => {
                     Edit
                 </Link>
                 <button className="btn btn-danger"
-                style={{marginLeft:'5px', flex: 1}}>
+                style={{marginLeft:'5px', flex: 1}}
+                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                onClick={() => dispatch({
+                    type: 'ADD_MODAL',
+                    payload: [{ data: '', id: product._id, title: product.title, type: 'DELETE_PRODUCT' }]
+                })}>
                     Delete
                 </button>
             </>
@@ -41,6 +46,13 @@ const ProductItem = ({product}) => {
 
     return (
         <div className="card" style={{width: '18rem'}}>
+            {
+                auth.user && auth.user.role === 'admin' &&
+                <input id='abc' type='checkbox' checked={product.checked}
+                className='position-absolute ms-0'
+                style={{background: 'red', width: '20px', height: '20px', border: 0}}
+                onChange={() => handleCheck(product._id)}/>
+            }
             <img src={product.images[0].url} className="card-img-top" alt={product.images[0].url}/>
             <div className="card-body">
                 <h5 className="card-title text-capitalize" title={product.title}>
