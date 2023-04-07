@@ -35,7 +35,12 @@ const ProductItem = ({product, handleCheck}) => {
                 data-bs-toggle="modal" data-bs-target="#exampleModal"
                 onClick={() => dispatch({
                     type: 'ADD_MODAL',
-                    payload: [{ data: '', id: product._id, title: product.title, type: 'DELETE_PRODUCT' }]
+                    payload: [{
+                        data: '',
+                        id: product._id,
+                        title: product.title,
+                        type: 'DELETE_PRODUCT'
+                    }]
                 })}>
                     Delete
                 </button>
