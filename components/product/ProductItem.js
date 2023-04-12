@@ -53,7 +53,7 @@ const ProductItem = ({product, handleCheck}) => {
         <div className="card" style={{width: '18rem'}}>
             {
                 auth.user && auth.user.role === 'admin' &&
-                <input id='abc' type='checkbox' checked={product.checked}
+                <input type='checkbox' checked={product.checked}
                 className='position-absolute ms-0'
                 style={{background: 'red', width: '20px', height: '20px', border: 0}}
                 onChange={() => handleCheck(product._id)}/>
