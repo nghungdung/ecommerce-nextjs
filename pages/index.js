@@ -7,7 +7,7 @@ import ProductItem from '../components/product/ProductItem'
 import filterSearch from '@/utils/filterSearch'
 import { useRouter } from 'next/router'
 import Filter from '@/components/Filter'
-
+import Carou from '@/components/Carou'
 
 const Home = (props) => {
   const [products,setProducts] = useState(props.products)
@@ -66,6 +66,8 @@ const Home = (props) => {
       <Head>
           <title>Home Page</title>
       </Head>
+
+      <Carou/>
 
       <Filter state={state}/>
 
