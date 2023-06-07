@@ -60,7 +60,7 @@ const Users = () => {
                                         data-bs-toggle="modal" data-bs-target="#exampleModal"
                                         onClick={() => dispatch({
                                             type: 'ADD_MODAL',
-                                            payload: { data: users, id: user._id, title: user.name, type: 'ADD_USERS' }
+                                            payload: [{ data: users, id: user._id, title: user.name, type: 'ADD_USERS' }]
                                         })}></i>
 
                                         : <i className="bi bi-trash3 text-danger ms-2" title="Remove"></i>

@@ -74,12 +74,7 @@ function NavBar() {
         </button>
         <div className="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
           <ul className="navbar-nav">
-            <Link href="/news" className={"nav-link" + isActive('/news')} >
-              <i className='bi bi-newspaper px-1' aria-hidden="true"></i>
-              News
-            </Link>
             <li className="nav-item">
-              
               <Link href="/cart" className={"nav-link" + isActive('/cart')} >
                 <i className="bi bi-basket2-fill position-relative px-1" aria-hidden="true">
                   <span className='position-absolute'
