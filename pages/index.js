@@ -67,7 +67,7 @@ const Home = (props) => {
           <title>Home Page</title>
       </Head>
 
-      <Carou/>
+      {/* <Carou/> */}
 
       <Filter state={state}/>
 
